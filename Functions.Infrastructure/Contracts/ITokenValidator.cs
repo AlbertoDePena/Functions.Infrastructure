@@ -1,7 +1,6 @@
-﻿using Functions.Infrastructure.Contracts;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
-namespace Demo
+namespace Functions.Infrastructure.Contracts
 {
     public interface ITokenValidator
     {

@@ -1,9 +1,8 @@
-﻿using Functions.Infrastructure;
-using Functions.Infrastructure.Contracts;
+﻿using Functions.Infrastructure.Contracts;
 using System;
 using System.Threading.Tasks;
 
-namespace Demo
+namespace Functions.Infrastructure.Middlewares
 {
     public class CorsMiddleware : HttpMiddleware
     {

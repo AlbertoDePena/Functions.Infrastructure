@@ -2,7 +2,7 @@
 using System.Net;
 using System.Net.Http;
 
-namespace Demo
+namespace Functions.Infrastructure.Middlewares
 {
     public static class CorsExtensions
     {

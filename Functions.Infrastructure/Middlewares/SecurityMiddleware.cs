@@ -1,22 +1,22 @@
-﻿using Functions.Infrastructure;
-using System.Linq;
+﻿using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Functions.Infrastructure.Contracts;
+using System;
 
-namespace Demo
+namespace Functions.Infrastructure.Middlewares
 {
     public class SecurityMiddleware : HttpMiddleware
     {
         private readonly bool _mustBeAuthenticated;
         private readonly ITokenValidator _tokenValidator;
 
-        public SecurityMiddleware(bool mustBeAuthenticated, ITokenValidator tokenValidator)
+        public SecurityMiddleware(ITokenValidator tokenValidator, bool mustBeAuthenticated = true)
         {
+            _tokenValidator = tokenValidator ?? throw new ArgumentNullException(nameof(tokenValidator));
             _mustBeAuthenticated = mustBeAuthenticated;
-            _tokenValidator = tokenValidator;
         }
 
         public override async Task InvokeAsync(IHttpFunctionContext context)
