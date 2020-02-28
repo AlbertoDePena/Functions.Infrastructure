@@ -40,7 +40,7 @@ namespace Functions.Infrastructure.Middlewares
             }
             else
             {
-                context.User = await _tokenValidator.ConstructPrincipal(bearerToken);
+                context.User = await _tokenValidator.ValidateAsync(bearerToken);
             }
 
             if (Next != null)

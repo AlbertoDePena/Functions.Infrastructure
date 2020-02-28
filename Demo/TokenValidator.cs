@@ -5,7 +5,7 @@ namespace Demo
 {
     public class TokenValidator : ITokenValidator
     {
-        public Task<IUser> ConstructPrincipal(string bearerToken)
+        public Task<IUser> ValidateAsync(string bearerToken)
         {
             var user = new DemoUser();
 

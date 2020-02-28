@@ -1,9 +1,10 @@
 using Functions.Infrastructure.Contracts;
+using System.Security.Claims;
 
 namespace Demo
 {
     public class DemoUser : IUser
     {
-        public string Rego => "Demo User";
+        public ClaimsPrincipal ClaimsPrincipal => throw new System.NotImplementedException();
     }
 }

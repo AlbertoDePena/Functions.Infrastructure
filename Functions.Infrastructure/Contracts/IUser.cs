@@ -1,7 +1,9 @@
-﻿namespace Functions.Infrastructure.Contracts
+﻿using System.Security.Claims;
+
+namespace Functions.Infrastructure.Contracts
 {
     public interface IUser
     {
-        string Rego { get; }
+        ClaimsPrincipal ClaimsPrincipal { get; }
     }
 }

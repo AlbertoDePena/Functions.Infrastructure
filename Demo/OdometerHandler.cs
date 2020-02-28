@@ -28,9 +28,9 @@ namespace Demo
                 return;
             }
 
-            context.Logger.LogInformation($"Odometer request received for rego:  '{context.User.Rego}'");
+            context.Logger.LogInformation($"Odometer request received for rego:  '{context.User.ClaimsPrincipal}'");
             
-            var odometerDto = await _getOdometerUsingRegoQuery.ExecuteAsync(context.User.Rego);
+            var odometerDto = await _getOdometerUsingRegoQuery.ExecuteAsync(context.User.ClaimsPrincipal.Identity.Name);
 
             if (odometerDto == null)
             {
