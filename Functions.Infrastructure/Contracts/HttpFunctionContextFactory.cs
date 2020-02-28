@@ -1,8 +1,7 @@
-﻿using Functions.Infrastructure.Contracts;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using System.Net.Http;
 
-namespace Functions.Infrastructure
+namespace Functions.Infrastructure.Contracts
 {
     public class HttpFunctionContextFactory : IHttpFunctionContextFactory
     {

@@ -3,6 +3,7 @@ using Xunit;
 using NSubstitute;
 using Microsoft.Extensions.Logging;
 using System.Net.Http;
+using Functions.Infrastructure.Contracts;
 
 namespace Functions.Infrastructure.Tests
 {
