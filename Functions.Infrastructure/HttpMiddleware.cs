@@ -8,12 +8,12 @@ namespace Functions.Infrastructure
     {
         public HttpMiddleware Next;
 
+        protected HttpMiddleware() { }
+
         protected HttpMiddleware(HttpMiddleware next)
         {
             Next = next ?? throw new ArgumentNullException(nameof(next));
         }
-
-        protected HttpMiddleware() { }
 
         public abstract Task InvokeAsync(IHttpFunctionContext context);
     }
