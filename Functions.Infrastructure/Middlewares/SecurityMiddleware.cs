@@ -2,7 +2,6 @@
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 using Functions.Infrastructure.Contracts;
 using System;
 
@@ -10,13 +9,11 @@ namespace Functions.Infrastructure.Middlewares
 {
     public class SecurityMiddleware : HttpMiddleware
     {
-        private readonly bool _mustBeAuthenticated;
         private readonly ITokenValidator _tokenValidator;
 
-        public SecurityMiddleware(ITokenValidator tokenValidator, bool mustBeAuthenticated = true)
+        public SecurityMiddleware(ITokenValidator tokenValidator)
         {
             _tokenValidator = tokenValidator ?? throw new ArgumentNullException(nameof(tokenValidator));
-            _mustBeAuthenticated = mustBeAuthenticated;
         }
 
         public override async Task InvokeAsync(IHttpFunctionContext context)
@@ -29,14 +26,9 @@ namespace Functions.Infrastructure.Middlewares
 
             if (string.IsNullOrWhiteSpace(bearerToken))
             {
-                context.Logger.LogWarning("No bearer token provided");
+                context.Response = context.Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Bearer token can't be empty");
 
-                if (_mustBeAuthenticated)
-                {
-                    context.Response = context.Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Bearer token can't be empty");
-
-                    return;
-                }
+                return;
             }
             else
             {

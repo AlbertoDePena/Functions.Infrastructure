@@ -17,7 +17,7 @@ namespace Demo
             builder.Services.AddSingleton<IUser, DemoUser>();
             builder.Services.AddSingleton<IGetOdometerUsingRegoQuery, OdometorRepository>();
             builder.Services.AddSingleton(new CorsMiddleware(allowedHttpVerbs: "GET, OPTIONS"));
-            builder.Services.AddSingleton(provider => new SecurityMiddleware(provider.GetService<ITokenValidator>(), mustBeAuthenticated: true));
+            builder.Services.AddSingleton<SecurityMiddleware>();
             builder.Services.AddSingleton<OdometerHandler>();            
             builder.Services.AddSingleton<IHttpFunctionContextBootstrapper, HttpFunctionContextBootstrapper>();
             builder.Services.AddSingleton<IMiddlewarePipeline>(provider =>
