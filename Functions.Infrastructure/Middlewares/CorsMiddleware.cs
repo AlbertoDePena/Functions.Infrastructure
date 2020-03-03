@@ -8,16 +8,9 @@ namespace Functions.Infrastructure.Middlewares
 {
     public class CorsMiddleware : HttpMiddleware
     {
-        private readonly string _allowedHttpVerbs;
-
-        public CorsMiddleware(string allowedHttpVerbs)
-        {
-            _allowedHttpVerbs = allowedHttpVerbs ?? throw new ArgumentNullException(nameof(allowedHttpVerbs));
-        }
-
         public override async Task InvokeAsync(IHttpFunctionContext context)
         {
-            var response = context.Request.GetCorsResponse(_allowedHttpVerbs);
+            var response = context.Request.GetCorsResponse();
 
             if (response == null)
             {
@@ -37,7 +30,7 @@ namespace Functions.Infrastructure.Middlewares
 
     internal static class CorsExtensions
     {
-        public static HttpResponseMessage GetCorsResponse(this HttpRequestMessage request, string allowedHttpVerbs)
+        public static HttpResponseMessage GetCorsResponse(this HttpRequestMessage request)
         {
             if (string.Equals(request.Method.Method, "OPTIONS", StringComparison.OrdinalIgnoreCase))
             {
@@ -47,7 +40,7 @@ namespace Functions.Infrastructure.Middlewares
                 {
                     response.Headers.Add("Access-Control-Allow-Credentials", "true");
                     response.Headers.Add("Access-Control-Allow-Origin", "*");
-                    response.Headers.Add("Access-Control-Allow-Methods", allowedHttpVerbs.ToUpper());
+                    response.Headers.Add("Access-Control-Allow-Methods", "GET, HEAD, OPTIONS, PUT, PATCH, POST, DELETE");
                     response.Headers.Add("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
                 }
 

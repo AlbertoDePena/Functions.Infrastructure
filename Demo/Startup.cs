@@ -13,12 +13,11 @@ namespace Demo
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
-            builder.Services.AddSingleton<ITokenValidator, TokenValidator>();
-            builder.Services.AddSingleton<IUser, DemoUser>();
             builder.Services.AddSingleton<IGetOdometerUsingRegoQuery, OdometorRepository>();
-            builder.Services.AddSingleton(new CorsMiddleware(allowedHttpVerbs: "GET, OPTIONS"));
-            builder.Services.AddSingleton<SecurityMiddleware>();
-            builder.Services.AddSingleton<OdometerHandler>();            
+            builder.Services.AddSingleton<OdometerHandler>();  
+            builder.Services.AddSingleton<CorsMiddleware>();
+            builder.Services.AddSingleton<SecurityMiddleware>();              
+            builder.Services.AddSingleton<ITokenValidator, TokenValidator>();        
             builder.Services.AddSingleton<IHttpFunctionContextBootstrapper, HttpFunctionContextBootstrapper>();
             builder.Services.AddSingleton<IMiddlewarePipeline>(provider =>
             {

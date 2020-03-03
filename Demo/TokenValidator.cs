@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Functions.Infrastructure.Contracts;
 
@@ -10,6 +11,21 @@ namespace Demo
             var user = new DemoUser();
 
             return Task.FromResult(user as IUser);
+        }
+    }
+
+    public class DemoUser : IUser
+    {
+        public ClaimsPrincipal ClaimsPrincipal
+        {
+            get
+            {
+                var identity = new ClaimsIdentity(null, "Bearer");
+
+                var principal = new ClaimsPrincipal(identity);
+
+                return principal;
+            }
         }
     }
 }

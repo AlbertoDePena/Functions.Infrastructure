@@ -26,15 +26,13 @@ namespace Functions.Infrastructure.Middlewares
 
             if (string.IsNullOrWhiteSpace(bearerToken))
             {
-                context.Response = context.Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Bearer token can't be empty");
+                context.Response = context.Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Bearer token is required");
 
                 return;
             }
-            else
-            {
-                context.User = await _tokenValidator.ValidateAsync(bearerToken);
-            }
-
+            
+            context.User = await _tokenValidator.ValidateAsync(bearerToken);
+            
             if (Next != null)
             {
                 await Next.InvokeAsync(context);

@@ -21,7 +21,7 @@ namespace Demo
 
         [FunctionName("OdometerReading")]
         public async Task<HttpResponseMessage> Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "GET", "OPTIONS")]HttpRequestMessage request, ILogger logger)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "GET", "OPTIONS")] HttpRequestMessage request, ILogger logger)
         {
             logger.LogInformation("Bootstrapping HTTP function context...");
 
