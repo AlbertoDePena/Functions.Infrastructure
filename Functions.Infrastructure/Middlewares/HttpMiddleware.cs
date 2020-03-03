@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Functions.Infrastructure.Contracts;
 
-namespace Functions.Infrastructure.Contracts
+namespace Functions.Infrastructure.Middlewares
 {
     public abstract class HttpMiddleware
     {

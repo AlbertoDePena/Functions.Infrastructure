@@ -10,12 +10,12 @@ namespace Demo
 {
     public class OdometerReading
     {
-        private readonly IHttpFunctionContextFactory _factory;
+        private readonly IHttpFunctionContextBootstrapper _bootstrapper;
         private readonly IMiddlewarePipeline _pipeline;
 
-        public OdometerReading(IHttpFunctionContextFactory factory, IMiddlewarePipeline pipeline)
+        public OdometerReading(IHttpFunctionContextBootstrapper bootstrapper, IMiddlewarePipeline pipeline)
         {
-            _factory = factory ?? throw new ArgumentNullException(nameof(factory));
+            _bootstrapper = bootstrapper ?? throw new ArgumentNullException(nameof(bootstrapper));
             _pipeline = pipeline ?? throw new ArgumentNullException(nameof(pipeline));
         }
 
@@ -25,7 +25,7 @@ namespace Demo
         {
             logger.LogInformation("Bootstrapping HTTP function context...");
 
-            var context = _factory.Bootstrap(request, logger);
+            var context = _bootstrapper.Bootstrap(request, logger);
 
             logger.LogInformation("Executing request...");
 

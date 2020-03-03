@@ -3,7 +3,7 @@ using System.Net.Http;
 
 namespace Functions.Infrastructure.Contracts
 {
-    public interface IHttpFunctionContextFactory
+    public interface IHttpFunctionContextBootstrapper
     {
         IHttpFunctionContext Bootstrap(HttpRequestMessage request, ILogger logger);
     }

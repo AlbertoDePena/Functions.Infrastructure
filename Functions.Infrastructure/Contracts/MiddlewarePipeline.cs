@@ -1,5 +1,6 @@
 ﻿using Functions.Infrastructure.Contracts;
 using Functions.Infrastructure.Exceptions;
+using Functions.Infrastructure.Middlewares;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -13,13 +14,9 @@ namespace Functions.Infrastructure
     {
         private readonly List<HttpMiddleware> _pipeline;
 
-        public MiddlewarePipeline(List<HttpMiddleware> pipeline)
+        public MiddlewarePipeline()
         {
-            if (pipeline == null) throw new ArgumentNullException(nameof(pipeline));
-
             _pipeline = new List<HttpMiddleware>();
-
-            pipeline.ForEach(Register);
         }
 
         public void Register(HttpMiddleware middleware)

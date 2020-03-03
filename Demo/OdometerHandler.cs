@@ -1,4 +1,4 @@
-﻿using Functions.Infrastructure;
+﻿using Functions.Infrastructure.Middlewares;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;

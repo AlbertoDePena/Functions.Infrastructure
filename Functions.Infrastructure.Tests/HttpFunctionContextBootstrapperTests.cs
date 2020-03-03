@@ -6,12 +6,12 @@ using Functions.Infrastructure.Contracts;
 
 namespace Functions.Infrastructure.Tests
 {
-    public class HttpFunctionContextFactoryTests
+    public class HttpFunctionContextBootstrapperTests
     {
         [Fact]
         public void Bootstrap_With_Valid_Inputs_Should_Have_A_HttpFunctionContext()
         {
-            var httpFunctionContextFactory = new HttpFunctionContextFactory();
+            var httpFunctionContextFactory = new HttpFunctionContextBootstrapper();
 
             var httpFunctionContext = httpFunctionContextFactory.Bootstrap(Substitute.For<HttpRequestMessage>(), Substitute.For<ILogger>());
 
@@ -21,7 +21,7 @@ namespace Functions.Infrastructure.Tests
         [Fact]
         public void Bootstrap_With_Valid_Inputs_Should_Have_A_Request()
         {
-            var httpFunctionContextFactory = new HttpFunctionContextFactory();
+            var httpFunctionContextFactory = new HttpFunctionContextBootstrapper();
 
             var httpFunctionContext = httpFunctionContextFactory.Bootstrap(Substitute.For<HttpRequestMessage>(), Substitute.For<ILogger>());
 
@@ -31,7 +31,7 @@ namespace Functions.Infrastructure.Tests
         [Fact]
         public void Bootstrap_With_Valid_Inputs_Should_Have_A_Logger()
         {
-            var httpFunctionContextFactory = new HttpFunctionContextFactory();
+            var httpFunctionContextFactory = new HttpFunctionContextBootstrapper();
 
             var httpFunctionContext = httpFunctionContextFactory.Bootstrap(Substitute.For<HttpRequestMessage>(), Substitute.For<ILogger>());
 
@@ -41,7 +41,7 @@ namespace Functions.Infrastructure.Tests
         [Fact]
         public void Bootstrap_With_Valid_Inputs_Should_Have_A_Null_Response()
         {
-            var httpFunctionContextFactory = new HttpFunctionContextFactory();
+            var httpFunctionContextFactory = new HttpFunctionContextBootstrapper();
 
             var httpFunctionContext = httpFunctionContextFactory.Bootstrap(Substitute.For<HttpRequestMessage>(), Substitute.For<ILogger>());
 
@@ -51,7 +51,7 @@ namespace Functions.Infrastructure.Tests
         [Fact]
         public void Bootstrap_With_Valid_Inputs_Should_Have_A_Null_User()
         {
-            var httpFunctionContextFactory = new HttpFunctionContextFactory();
+            var httpFunctionContextFactory = new HttpFunctionContextBootstrapper();
 
             var httpFunctionContext = httpFunctionContextFactory.Bootstrap(Substitute.For<HttpRequestMessage>(), Substitute.For<ILogger>());
 
