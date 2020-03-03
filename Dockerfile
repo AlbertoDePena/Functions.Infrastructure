@@ -4,7 +4,7 @@ COPY ./Functions.Infrastructure /src/Functions.Infrastructure
 COPY ./Demo /src/Demo
 RUN cd /src/Demo && \
     mkdir -p /home/site/wwwroot && \
-    dotnet publish *.csproj --output /home/site/wwwroot
+    dotnet publish *.csproj --configuration Release --output /home/site/wwwroot
 
 FROM mcr.microsoft.com/azure-functions/dotnet:3.0
 ENV AzureWebJobsScriptRoot=/home/site/wwwroot \
