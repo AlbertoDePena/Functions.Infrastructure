@@ -54,7 +54,6 @@ namespace Numaka.Functions.Infrastructure
             catch (Exception e)
             {
                 context.Logger.LogError(e, e.Message);
-                var response = new HttpResponseMessage();
                 
                 return context.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e);
             }
