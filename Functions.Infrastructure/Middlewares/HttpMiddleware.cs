@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Functions.Infrastructure.Contracts;
+using Numaka.Functions.Infrastructure.Contracts;
 
-namespace Functions.Infrastructure.Middlewares
+namespace Numaka.Functions.Infrastructure.Middlewares
 {
     public abstract class HttpMiddleware
     {

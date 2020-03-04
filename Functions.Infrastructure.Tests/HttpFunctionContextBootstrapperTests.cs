@@ -2,9 +2,9 @@
 using NSubstitute;
 using System.Net.Http;
 using Microsoft.Extensions.Logging;
-using Functions.Infrastructure.Contracts;
+using Numaka.Functions.Infrastructure.Contracts;
 
-namespace Functions.Infrastructure.Tests
+namespace Numaka.Functions.Infrastructure.Tests
 {
     public class HttpFunctionContextBootstrapperTests
     {

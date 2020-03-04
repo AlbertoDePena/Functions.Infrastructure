@@ -1,8 +1,8 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
-using Functions.Infrastructure.Middlewares;
+using Numaka.Functions.Infrastructure.Middlewares;
 
-namespace Functions.Infrastructure.Contracts
+namespace Numaka.Functions.Infrastructure.Contracts
 {
     public interface IMiddlewarePipeline
     {

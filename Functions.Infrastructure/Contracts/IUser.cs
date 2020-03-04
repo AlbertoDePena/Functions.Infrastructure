@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
 
-namespace Functions.Infrastructure.Contracts
+namespace Numaka.Functions.Infrastructure.Contracts
 {
     public interface IUser
     {

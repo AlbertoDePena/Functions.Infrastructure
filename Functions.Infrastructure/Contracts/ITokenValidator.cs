@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Functions.Infrastructure.Contracts
+namespace Numaka.Functions.Infrastructure.Contracts
 {
     public interface ITokenValidator
     {

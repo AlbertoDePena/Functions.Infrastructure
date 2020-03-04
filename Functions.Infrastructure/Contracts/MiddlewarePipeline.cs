@@ -1,6 +1,6 @@
-﻿using Functions.Infrastructure.Contracts;
-using Functions.Infrastructure.Exceptions;
-using Functions.Infrastructure.Middlewares;
+﻿using Numaka.Functions.Infrastructure.Contracts;
+using Numaka.Functions.Infrastructure.Exceptions;
+using Numaka.Functions.Infrastructure.Middlewares;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace Functions.Infrastructure
+namespace Numaka.Functions.Infrastructure
 {
     public class MiddlewarePipeline : IMiddlewarePipeline
     {

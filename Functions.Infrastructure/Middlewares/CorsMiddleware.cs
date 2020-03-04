@@ -1,10 +1,10 @@
-﻿using Functions.Infrastructure.Contracts;
+﻿using Numaka.Functions.Infrastructure.Contracts;
 using System;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace Functions.Infrastructure.Middlewares
+namespace Numaka.Functions.Infrastructure.Middlewares
 {
     public class CorsMiddleware : HttpMiddleware
     {

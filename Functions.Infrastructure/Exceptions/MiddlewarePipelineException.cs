@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Functions.Infrastructure.Exceptions
+namespace Numaka.Functions.Infrastructure.Exceptions
 {
     public class MiddlewarePipelineException : Exception
     {

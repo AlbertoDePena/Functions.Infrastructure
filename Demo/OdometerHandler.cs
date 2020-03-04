@@ -1,9 +1,9 @@
-﻿using Functions.Infrastructure.Middlewares;
+﻿using Numaka.Functions.Infrastructure.Middlewares;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Functions.Infrastructure.Contracts;
+using Numaka.Functions.Infrastructure.Contracts;
 using System;
 
 namespace Demo

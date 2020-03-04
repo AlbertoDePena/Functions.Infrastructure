@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.Net.Http;
 
-namespace Functions.Infrastructure.Contracts
+namespace Numaka.Functions.Infrastructure.Contracts
 {
     public interface IHttpFunctionContextBootstrapper
     {
