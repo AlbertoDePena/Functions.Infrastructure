@@ -2,10 +2,9 @@
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Numaka.Functions.Infrastructure.Contracts;
 using System;
 
-namespace Numaka.Functions.Infrastructure.Middlewares
+namespace Numaka.Functions.Infrastructure
 {
     /// <summary>
     /// Security middleware

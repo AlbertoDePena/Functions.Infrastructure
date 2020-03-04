@@ -2,7 +2,7 @@
 using System;
 using System.Net.Http;
 
-namespace Numaka.Functions.Infrastructure.Contracts
+namespace Numaka.Functions.Infrastructure
 {
     /// <inhericdoc />
     public class HttpFunctionContext : IHttpFunctionContext

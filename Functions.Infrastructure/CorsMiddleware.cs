@@ -1,10 +1,9 @@
-﻿using Numaka.Functions.Infrastructure.Contracts;
-using System;
+﻿using System;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace Numaka.Functions.Infrastructure.Middlewares
+namespace Numaka.Functions.Infrastructure
 {
     /// <summary>
     /// CORS middleware

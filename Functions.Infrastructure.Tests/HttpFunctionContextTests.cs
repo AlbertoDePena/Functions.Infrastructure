@@ -3,7 +3,6 @@ using Xunit;
 using NSubstitute;
 using Microsoft.Extensions.Logging;
 using System.Net.Http;
-using Numaka.Functions.Infrastructure.Contracts;
 
 namespace Numaka.Functions.Infrastructure.Tests
 {

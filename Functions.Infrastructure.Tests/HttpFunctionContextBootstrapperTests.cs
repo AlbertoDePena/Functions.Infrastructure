@@ -2,7 +2,6 @@
 using NSubstitute;
 using System.Net.Http;
 using Microsoft.Extensions.Logging;
-using Numaka.Functions.Infrastructure.Contracts;
 
 namespace Numaka.Functions.Infrastructure.Tests
 {

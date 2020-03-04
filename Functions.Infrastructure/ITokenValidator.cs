@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Numaka.Functions.Infrastructure.Contracts
+namespace Numaka.Functions.Infrastructure
 {
     /// <summary>
     /// Token Validator interface

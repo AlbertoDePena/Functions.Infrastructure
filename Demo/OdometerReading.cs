@@ -1,4 +1,4 @@
-﻿using Numaka.Functions.Infrastructure.Contracts;
+﻿using Numaka.Functions.Infrastructure;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;

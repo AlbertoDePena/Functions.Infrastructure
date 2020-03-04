@@ -1,6 +1,6 @@
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Numaka.Functions.Infrastructure.Contracts;
+using Numaka.Functions.Infrastructure;
 
 namespace Demo
 {

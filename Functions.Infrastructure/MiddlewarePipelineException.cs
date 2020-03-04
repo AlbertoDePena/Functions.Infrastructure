@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Numaka.Functions.Infrastructure.Exceptions
+namespace Numaka.Functions.Infrastructure
 {
     /// <summary>
     /// Middleware pipeline exception

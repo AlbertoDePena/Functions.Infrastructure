@@ -1,7 +1,4 @@
-﻿using Numaka.Functions.Infrastructure.Contracts;
-using Numaka.Functions.Infrastructure.Exceptions;
-using Numaka.Functions.Infrastructure.Middlewares;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Net;

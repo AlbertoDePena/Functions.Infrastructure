@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
 
-namespace Numaka.Functions.Infrastructure.Contracts
+namespace Numaka.Functions.Infrastructure
 {
     /// <summary>
     /// Generic user interface

@@ -1,7 +1,5 @@
 ﻿using Demo;
 using Numaka.Functions.Infrastructure;
-using Numaka.Functions.Infrastructure.Contracts;
-using Numaka.Functions.Infrastructure.Middlewares;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 
