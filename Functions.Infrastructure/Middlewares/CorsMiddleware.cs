@@ -6,8 +6,12 @@ using System.Threading.Tasks;
 
 namespace Numaka.Functions.Infrastructure.Middlewares
 {
+    /// <summary>
+    /// CORS middleware
+    /// </summary>
     public class CorsMiddleware : HttpMiddleware
     {
+        /// <inhericdoc />
         public override async Task InvokeAsync(IHttpFunctionContext context)
         {
             var response = context.Request.GetCorsResponse();

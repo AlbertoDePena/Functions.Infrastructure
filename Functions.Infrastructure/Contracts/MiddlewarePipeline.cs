@@ -10,15 +10,20 @@ using System.Threading.Tasks;
 
 namespace Numaka.Functions.Infrastructure
 {
+    /// <inhericdoc />
     public class MiddlewarePipeline : IMiddlewarePipeline
     {
         private readonly List<HttpMiddleware> _pipeline;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public MiddlewarePipeline()
         {
             _pipeline = new List<HttpMiddleware>();
         }
 
+        /// <inhericdoc />
         public void Register(HttpMiddleware middleware)
         {
             if (_pipeline.Count > 0)
@@ -29,6 +34,7 @@ namespace Numaka.Functions.Infrastructure
             _pipeline.Add(middleware);
         }
 
+        /// <inhericdoc />
         public async Task<HttpResponseMessage> ExecuteAsync(IHttpFunctionContext context)
         {
             try
@@ -48,7 +54,8 @@ namespace Numaka.Functions.Infrastructure
             catch (Exception e)
             {
                 context.Logger.LogError(e, e.Message);
-
+                var response = new HttpResponseMessage();
+                
                 return context.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e);
             }
         }

@@ -7,15 +7,23 @@ using System;
 
 namespace Numaka.Functions.Infrastructure.Middlewares
 {
+    /// <summary>
+    /// Security middleware
+    /// </summary>
     public class SecurityMiddleware : HttpMiddleware
     {
         private readonly ITokenValidator _tokenValidator;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="tokenValidator"></param>
         public SecurityMiddleware(ITokenValidator tokenValidator)
         {
             _tokenValidator = tokenValidator ?? throw new ArgumentNullException(nameof(tokenValidator));
         }
 
+        /// <inhericdoc />
         public override async Task InvokeAsync(IHttpFunctionContext context)
         {
             var header = context.Request.Headers
