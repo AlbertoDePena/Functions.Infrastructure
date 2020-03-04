@@ -6,26 +6,13 @@ namespace Demo
 {
     public class TokenValidator : ITokenValidator
     {
-        public Task<IUser> ValidateAsync(string bearerToken)
+        public Task<ClaimsPrincipal> ValidateAsync(string bearerToken)
         {
-            var user = new DemoUser();
+            var identity = new ClaimsIdentity(null, "Bearer");
 
-            return Task.FromResult(user as IUser);
-        }
-    }
+            var principal = new ClaimsPrincipal(identity);
 
-    public class DemoUser : IUser
-    {
-        public ClaimsPrincipal ClaimsPrincipal
-        {
-            get
-            {
-                var identity = new ClaimsIdentity(null, "Bearer");
-
-                var principal = new ClaimsPrincipal(identity);
-
-                return principal;
-            }
+            return Task.FromResult(principal);
         }
     }
 }

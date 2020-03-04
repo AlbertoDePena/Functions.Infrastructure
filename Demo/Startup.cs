@@ -17,7 +17,7 @@ namespace Demo
             builder.Services.AddSingleton<SecurityMiddleware>();              
             builder.Services.AddSingleton<ITokenValidator, TokenValidator>();        
             builder.Services.AddSingleton<IHttpFunctionContextBootstrapper, HttpFunctionContextBootstrapper>();
-            builder.Services.AddSingleton<IMiddlewarePipeline>(provider =>
+            builder.Services.AddTransient<IMiddlewarePipeline>(provider =>
             {
                 var pipeline = new MiddlewarePipeline();
 

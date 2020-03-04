@@ -54,7 +54,7 @@ namespace Numaka.Functions.Infrastructure.Tests
 
             var httpFunctionContext = httpFunctionContextFactory.Bootstrap(Substitute.For<HttpRequestMessage>(), Substitute.For<ILogger>());
 
-            Assert.Null(httpFunctionContext.User);
+            Assert.Null(httpFunctionContext.ClaimsPrincipal);
         }
     }
 }

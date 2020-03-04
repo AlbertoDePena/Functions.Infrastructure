@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using System.Security.Claims;
 
 namespace Numaka.Functions.Infrastructure
 {
@@ -11,6 +12,6 @@ namespace Numaka.Functions.Infrastructure
         /// Validate a bearer token
         /// </summary>
         /// <param name="bearerToken"></param>
-        Task<IUser> ValidateAsync(string bearerToken);
+        Task<ClaimsPrincipal> ValidateAsync(string bearerToken);
     }
 }

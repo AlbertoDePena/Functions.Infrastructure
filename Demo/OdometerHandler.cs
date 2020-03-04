@@ -18,7 +18,7 @@ namespace Demo
 
         public override async Task InvokeAsync(IHttpFunctionContext context)
         {
-            if (context.User == null)
+            if (context.ClaimsPrincipal == null)
             {
                 context.Logger.LogWarning("Context does not have a user");
                 
@@ -27,9 +27,9 @@ namespace Demo
                 return;
             }
 
-            context.Logger.LogInformation($"Odometer request received for rego:  '{context.User.ClaimsPrincipal}'");
+            context.Logger.LogInformation($"Odometer request received for rego:  '{context.ClaimsPrincipal}'");
             
-            var odometerDto = await _getOdometerUsingRegoQuery.ExecuteAsync(context.User.ClaimsPrincipal.Identity.Name);
+            var odometerDto = await _getOdometerUsingRegoQuery.ExecuteAsync(context.ClaimsPrincipal.Identity.Name);
 
             if (odometerDto == null)
             {

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
 using System.Net.Http;
+using System.Security.Claims;
 
 namespace Numaka.Functions.Infrastructure
 {
@@ -28,6 +29,6 @@ namespace Numaka.Functions.Infrastructure
         public ILogger Logger { get; }
 
         /// <inhericdoc />
-        public IUser User { get; set; }
+        public ClaimsPrincipal ClaimsPrincipal { get; set; }
     }
 }
