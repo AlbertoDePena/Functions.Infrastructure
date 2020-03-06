@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Numaka.Functions.Infrastructure</AssemblyName>
     <RootNamespace>Numaka.Functions.Infrastructure</RootNamespace>
-    <Version>1.0.3s</Version>
+    <Version>1.0.3</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Description>Azure Functions infrastructure</Description>
