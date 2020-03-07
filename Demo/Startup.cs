@@ -11,23 +11,13 @@ namespace Demo
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
-            builder.Services.AddSingleton<IGetOdometerUsingRegoQuery, OdometorRepository>();
+            builder.Services.AddSingleton<IGetOdometerReading, OdometorRepository>();
             builder.Services.AddSingleton<OdometerHandler>();  
             builder.Services.AddSingleton<CorsMiddleware>();
             builder.Services.AddSingleton<SecurityMiddleware>();              
             builder.Services.AddSingleton<ITokenValidator, TokenValidator>();        
             builder.Services.AddSingleton<IHttpFunctionContextBootstrapper, HttpFunctionContextBootstrapper>();
-            builder.Services.AddTransient<IMiddlewarePipeline>(provider =>
-            {
-                var pipeline = new MiddlewarePipeline();
-
-                // Order of middleware matters!!!
-                pipeline.Register(provider.GetService<CorsMiddleware>());
-                pipeline.Register(provider.GetService<SecurityMiddleware>());
-                pipeline.Register(provider.GetService<OdometerHandler>());
-
-                return pipeline;
-            });
+            builder.Services.AddTransient<IMiddlewarePipeline, MiddlewarePipeline>();
         }
     }
 }

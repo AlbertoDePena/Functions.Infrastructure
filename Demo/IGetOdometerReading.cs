@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace Demo
 {
-    public interface IGetOdometerUsingRegoQuery
+    public interface IGetOdometerReading
     {
-        Task<object> ExecuteAsync(string userName);
+        Task<object> GetOdometerReadingAsync(string userName);
     }
 }

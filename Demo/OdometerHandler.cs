@@ -9,11 +9,11 @@ namespace Demo
 {
     public class OdometerHandler : HttpMiddleware
     {
-        private readonly IGetOdometerUsingRegoQuery _getOdometerUsingRegoQuery;
+        private readonly IGetOdometerReading _getOdometerReading;
 
-        public OdometerHandler(IGetOdometerUsingRegoQuery getOdometerUsingRegoQuery)
+        public OdometerHandler(IGetOdometerReading getOdometerReading)
         {
-            _getOdometerUsingRegoQuery = getOdometerUsingRegoQuery ?? throw new ArgumentNullException(nameof(getOdometerUsingRegoQuery));
+            _getOdometerReading = getOdometerReading ?? throw new ArgumentNullException(nameof(getOdometerReading));
         }
 
         public override async Task InvokeAsync(IHttpFunctionContext context)
@@ -29,7 +29,7 @@ namespace Demo
 
             context.Logger.LogInformation($"Odometer request received for rego:  '{context.ClaimsPrincipal}'");
             
-            var odometerDto = await _getOdometerUsingRegoQuery.ExecuteAsync(context.ClaimsPrincipal.Identity.Name);
+            var odometerDto = await _getOdometerReading.GetOdometerReadingAsync(context.ClaimsPrincipal.Identity.Name);
 
             if (odometerDto == null)
             {
