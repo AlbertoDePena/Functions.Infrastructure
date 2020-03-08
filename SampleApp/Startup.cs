@@ -1,11 +1,10 @@
-﻿using Demo;
-using Numaka.Functions.Infrastructure;
+﻿using Numaka.Functions.Infrastructure;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 
-[assembly: FunctionsStartup(typeof(Startup))]
+[assembly: FunctionsStartup(typeof(SampleApp.Startup))]
 
-namespace Demo
+namespace SampleApp
 {
     public class Startup : FunctionsStartup
     {

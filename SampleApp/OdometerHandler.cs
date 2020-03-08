@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using System;
 
-namespace Demo
+namespace SampleApp
 {
     public class OdometerHandler : HttpMiddleware
     {
@@ -27,7 +27,7 @@ namespace Demo
                 return;
             }
 
-            context.Logger.LogInformation($"Odometer request received for rego:  '{context.ClaimsPrincipal}'");
+            context.Logger.LogInformation($"Odometer request received for:  '{context.ClaimsPrincipal}'");
             
             var odometerDto = await _getOdometerReading.GetOdometerReadingAsync(context.ClaimsPrincipal.Identity.Name);
 

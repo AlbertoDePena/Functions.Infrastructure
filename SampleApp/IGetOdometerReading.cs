@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Demo
+namespace SampleApp
 {
     public interface IGetOdometerReading
     {
-        Task<object> GetOdometerReadingAsync(string userName);
+        Task<OdometerData> GetOdometerReadingAsync(string userName);
     }
 }

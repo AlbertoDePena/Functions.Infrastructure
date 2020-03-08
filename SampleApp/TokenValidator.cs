@@ -2,7 +2,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Numaka.Functions.Infrastructure;
 
-namespace Demo
+namespace SampleApp
 {
     public class TokenValidator : ITokenValidator
     {

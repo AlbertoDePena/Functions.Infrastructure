@@ -1,8 +1,8 @@
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS installer-env
 
 COPY ./Functions.Infrastructure /src/Functions.Infrastructure
-COPY ./Demo /src/Demo
-RUN cd /src/Demo && \
+COPY ./SampleApp /src/SampleApp
+RUN cd /src/SampleApp && \
     mkdir -p /home/site/wwwroot && \
     dotnet publish *.csproj --configuration Release --output /home/site/wwwroot
 
