@@ -33,7 +33,8 @@ namespace SampleApp
 
             // Order of middleware matters!!!
             pipeline.Register(_serviceProvider.GetService<CorsMiddleware>());
-            pipeline.Register(_serviceProvider.GetService<SecurityMiddleware>());
+            pipeline.Register(_serviceProvider.GetService<ExceptionMiddleware>());
+            pipeline.Register(_serviceProvider.GetService<SecurityMiddleware>());            
             pipeline.Register(_serviceProvider.GetService<OdometerHandler>());
 
             logger.LogInformation("Executing request...");
