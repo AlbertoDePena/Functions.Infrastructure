@@ -8,7 +8,12 @@ namespace SampleApp
     {
         public Task<ClaimsPrincipal> ValidateAsync(string bearerToken)
         {
-            var identity = new ClaimsIdentity(null, "Bearer");
+            var claims = new Claim[]
+            {
+                new Claim(ClaimTypes.Name, "Test User")
+            };
+            
+            var identity = new ClaimsIdentity(claims, "Bearer");
 
             var principal = new ClaimsPrincipal(identity);
 

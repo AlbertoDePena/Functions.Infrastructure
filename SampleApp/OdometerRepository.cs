@@ -16,7 +16,7 @@ namespace SampleApp
         {
             var value = _random.Next(10000, 20000);
 
-            var data = new OdometerData { Value = value, Date = DateTimeOffset.UtcNow };
+            var data = new OdometerData { Value = value, Date = DateTimeOffset.UtcNow, Message = $"Odometer readings for {userName}" };
 
             return Task.FromResult(data);
         }

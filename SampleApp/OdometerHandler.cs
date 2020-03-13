@@ -27,7 +27,7 @@ namespace SampleApp
                 return;
             }
 
-            context.Logger.LogInformation($"Odometer request received for:  '{context.ClaimsPrincipal}'");
+            context.Logger.LogInformation($"Odometer request received for:  '{context.ClaimsPrincipal.Identity.Name}'");
             
             var odometerDto = await _getOdometerReading.GetOdometerReadingAsync(context.ClaimsPrincipal.Identity.Name);
 
