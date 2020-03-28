@@ -17,7 +17,9 @@ type HttpFunctionContext = {
 
 type HttpHandler = HttpFunctionContext -> Async<HttpFunctionContext>
 
-type ExecutePipeline = HttpHandler list -> HttpFunctionContext -> Async<HttpResponseMessage>
+type HandleError = HttpFunctionContext -> exn -> HttpResponseMessage
+
+type ExecutePipeline = HandleError -> HttpHandler list -> HttpFunctionContext -> Async<HttpResponseMessage>
 
 [<RequireQualifiedAccess>]
 module HttpFunctionContext =

@@ -61,11 +61,13 @@ module MiddlewarePipeline =
     /// 
     /// **Parameters**
     /// 
+    /// handleError: transform exception to HttpResponseMessage
+    /// 
     /// pipeline: HttpHandler list
     /// 
     /// context: HttpFunctionContext
     let execute : ExecutePipeline = 
-        fun pipeline context ->
+        fun handleError pipeline context ->
             async {
                 try
                     let enrichWithCorsOrigin (response : HttpResponseMessage) =
@@ -92,7 +94,5 @@ module MiddlewarePipeline =
                     | None -> return errorReponse
                     | Some response -> return enrichWithCorsOrigin response
                 with
-                | ex ->
-                    context.Logger.LogError(ex, ex.Message)
-                    return context.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex)
+                | ex -> return handleError context ex
             }
