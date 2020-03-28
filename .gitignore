@@ -3,3 +3,5 @@
 **/.ionide
 **/.vs
 **/local.settings.json
+.fake
+.ionide
