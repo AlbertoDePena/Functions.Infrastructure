@@ -42,7 +42,7 @@ module Middleware =
                     |> Seq.tryFind (fun q -> q.Key = "Authorization")
                     |> Option.map (fun q -> if Seq.isEmpty q.Value then String.Empty else q.Value |> Seq.head)
                     |> Option.map (fun h -> h.Substring("Bearer ".Length).Trim())
-                    |> Option.defaultWith (fun _ -> invalidOp "Bearer token is required")
+                    |> Option.defaultWith (fun _ -> raise (ValidateBearerTokenException("Bearer token is required")))
 
                 let! claimsPrincipal = validateBearerToken bearerToken
 
@@ -73,10 +73,6 @@ module MiddlewarePipeline =
                     let enrichWithCorsOrigin (response : HttpResponseMessage) =
                         response.Headers.Add("Access-Control-Allow-Origin", "*"); response
 
-                    let errorReponse = 
-                        context.Request.CreateErrorResponse(
-                            HttpStatusCode.InternalServerError, "Invoked HTTP middleware did not yield a response")
-
                     let rec execute pipeline context =
                         async {
                             match pipeline with
@@ -91,7 +87,7 @@ module MiddlewarePipeline =
                     let! context = execute pipeline context
 
                     match context.Response with
-                    | None -> return errorReponse
+                    | None -> return raise (MiddlewarePipelineException("HTTP handler did not yield a response"))
                     | Some response -> return enrichWithCorsOrigin response
                 with
                 | ex -> return errorHandler context ex

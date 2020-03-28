@@ -1,8 +1,15 @@
 namespace Numaka.FSharp.Functions.Infrastructure
 
+open System
 open System.Net.Http
 open System.Security.Claims
 open Microsoft.Extensions.Logging
+
+type MiddlewarePipelineException(message : string) =
+    inherit Exception(message)
+
+type ValidateBearerTokenException(message : string) =
+    inherit Exception(message)
 
 type BearerToken = string
 
