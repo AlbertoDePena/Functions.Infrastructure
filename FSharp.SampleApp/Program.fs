@@ -15,7 +15,7 @@ module Program =
     let run ([<HttpTrigger(AuthorizationLevel.Anonymous, "get", "options")>] request : HttpRequestMessage) (logger : ILogger) = 
         async {
             
-            let handleError : HandleError =
+            let errorHandler : ErrorHandler =
                 fun context ex ->
                     context.Logger.LogError(ex.Message)
                     context.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex)
@@ -47,7 +47,7 @@ module Program =
 
             let! response =
                 HttpFunctionContext.bootstrap logger request
-                |> MiddlewarePipeline.execute handleError pipeline
+                |> MiddlewarePipeline.execute errorHandler pipeline
 
             return response
         } |> Async.StartAsTask
