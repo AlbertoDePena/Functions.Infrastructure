@@ -35,66 +35,57 @@ module Program =
                 return identity |> ClaimsPrincipal |> Some 
             }
 
+    let helloWorldHandler : HttpHandler =
+        fun context -> 
+            async {
+                context.Logger.LogInformation("Handling HelloWorld request...")
+
+                let response = context.Request.CreateResponse(HttpStatusCode.OK, "Hello World!")
+
+                return Some response
+            }
+
+    let helloLazHandler : HttpHandler =
+        fun context -> 
+            async {
+                context.Logger.LogInformation("Handling HelloLaz request...")
+
+                let response = context.Request.CreateResponse(HttpStatusCode.OK, "Hello Laz!")
+
+                return Some response
+            }
+
+    let currentUserHandler : HttpHandler =
+        fun context -> 
+            async {
+                context.Logger.LogInformation("Handling CurrentUser request...")
+
+                let! claimsPrincipal = context.GetClaimsPrincipal context
+
+                let user = 
+                    claimsPrincipal
+                    |> Option.map (fun principal -> principal.Identity.Name)
+                    |> Option.defaultWith (fun _ -> invalidOp "ClaimsPrincipal not available")
+
+                let response = context.Request.CreateResponse(HttpStatusCode.OK, sprintf "The current user is: %s" user)
+
+                return Some response
+            }
+
     [<FunctionName("HelloWorld")>]
-    let helloWorld ([<HttpTrigger(AuthorizationLevel.Anonymous, "get", "options")>] request : HttpRequestMessage) (logger : ILogger) = 
-        async {
-            
-            let helloWorldHandler : HttpHandler =
-                fun context -> 
-                    async {
-                        context.Logger.LogInformation("Handling HelloWorld request...")
-
-                        let response = context.Request.CreateResponse(HttpStatusCode.OK, "Hello World!")
-
-                        return Some response
-                    }
-            
-            return!
-                HttpFunctionContext.bootstrap logger request
-                |> HttpHandler.handle errorHandler helloWorldHandler
-        } |> Async.StartAsTask
+    let helloWorld ([<HttpTrigger(AuthorizationLevel.Anonymous, "get", "options")>] request : HttpRequestMessage) (logger : ILogger) =                                           
+        HttpFunctionContext.bootstrap logger request
+        |> HttpHandler.handle errorHandler helloWorldHandler
+        |> Async.StartAsTask
 
     [<FunctionName("HelloLaz")>]
-    let helloLaz ([<HttpTrigger(AuthorizationLevel.Anonymous, "get", "options")>] request : HttpRequestMessage) (logger : ILogger) = 
-        async {
-            
-            let helloLazHandler : HttpHandler =
-                fun context -> 
-                    async {
-                        context.Logger.LogInformation("Handling HelloLaz request...")
-
-                        let response = context.Request.CreateResponse(HttpStatusCode.OK, "Hello Laz!")
-
-                        return Some response
-                    }
-
-            return!
-                HttpFunctionContext.bootstrap logger request
-                |> HttpHandler.handle errorHandler helloLazHandler
-        } |> Async.StartAsTask    
+    let helloLaz ([<HttpTrigger(AuthorizationLevel.Anonymous, "get", "options")>] request : HttpRequestMessage) (logger : ILogger) =        
+        HttpFunctionContext.bootstrap logger request
+        |> HttpHandler.handle errorHandler helloLazHandler
+        |> Async.StartAsTask    
 
     [<FunctionName("CurrentUser")>]
-    let currentUser ([<HttpTrigger(AuthorizationLevel.Anonymous, "get", "options")>] request : HttpRequestMessage) (logger : ILogger) = 
-        async {
-            
-            let currentUserHandler : HttpHandler =
-                fun context -> 
-                    async {
-                        context.Logger.LogInformation("Handling CurrentUser request...")
-
-                        let! claimsPrincipal = context.GetClaimsPrincipal context
-
-                        let user = 
-                            claimsPrincipal
-                            |> Option.map (fun principal -> principal.Identity.Name)
-                            |> Option.defaultWith (fun _ -> invalidOp "ClaimsPrincipal not available")
-
-                        let response = context.Request.CreateResponse(HttpStatusCode.OK, sprintf "The current user is: %s" user)
-
-                        return Some response
-                    }
-
-            return!
-                HttpFunctionContext.bootstrapWithSecurity logger request getClaimsPrincipal
-                |> HttpHandler.handle errorHandler currentUserHandler
-        } |> Async.StartAsTask      
+    let currentUser ([<HttpTrigger(AuthorizationLevel.Anonymous, "get", "options")>] request : HttpRequestMessage) (logger : ILogger) =         
+        HttpFunctionContext.bootstrapWithSecurity logger request getClaimsPrincipal
+        |> HttpHandler.handle errorHandler currentUserHandler
+        |> Async.StartAsTask      
