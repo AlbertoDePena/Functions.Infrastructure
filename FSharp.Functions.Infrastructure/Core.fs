@@ -2,7 +2,6 @@
 
 open System
 open System.Net.Http
-open Microsoft.Extensions.Logging
 open System.Net
 
 [<RequireQualifiedAccess>]        
@@ -27,68 +26,43 @@ module Middleware =
     let cors : HttpHandler =
         fun context ->
             getCorsResponse context.Request
-            |> Option.map (fun response -> { context with Response = Some response })
-            |> Option.defaultValue context
             |> Async.singleton
 
-    /// **Description**
-    /// 
-    /// Security: assigns a ClaimsPrincipal to the HttpFunctionContext using ValidateBearerToken
-    let security (validateBearerToken : ValidateBearerToken) : HttpHandler =
-        fun context ->
-            async {
-                let bearerToken = 
-                    context.Request.Headers 
-                    |> Seq.tryFind (fun q -> q.Key = "Authorization")
-                    |> Option.map (fun q -> if Seq.isEmpty q.Value then String.Empty else q.Value |> Seq.head)
-                    |> Option.map (fun h -> h.Substring("Bearer ".Length).Trim())
-                    |> Option.defaultWith (fun _ -> raise (ValidateBearerTokenException("Bearer token is required")))
-
-                let! claimsPrincipal = validateBearerToken bearerToken
-
-                return { context with ClaimsPrincipal = Some claimsPrincipal }
-            }
- 
 [<RequireQualifiedAccess>]
 module MiddlewarePipeline =
 
     /// **Description**
     /// 
-    /// Execute each HttpHandler in order until the HttpFunctionContext.Response is Some HttpResponseMessage.
-    /// Return InternalServerError response when HttpFunctionContext.Response is None
-    /// 
-    /// Order of HTTP handlers matters
+    /// Execute HttpHandler resulting in a HttpResponseMessage.
+    /// Throws MiddlewarePipelineException when HttpHandler HttpResponseMessage is None
     /// 
     /// **Parameters**
     /// 
-    /// errorHandler: transform exception to HttpResponseMessage
+    /// errorHandler: ErrorHandler
     /// 
-    /// pipeline: HttpHandler list
+    /// handler: HttpHandler
     /// 
     /// context: HttpFunctionContext
     let execute : ExecutePipeline = 
-        fun errorHandler pipeline context ->
+        fun errorHandler handler context ->
             async {
                 try
                     let enrichWithCorsOrigin (response : HttpResponseMessage) =
                         response.Headers.Add("Access-Control-Allow-Origin", "*"); response
 
-                    let rec execute pipeline context =
+                    let execute mapper context =
                         async {
-                            match pipeline with
-                            | [] -> return context
-                            | httpFunc::tail ->
-                                let! context = httpFunc context
-                                match context.Response with
-                                | Some _ -> return context
-                                | None -> return! execute tail context 
+                            let! handlerResponse = handler context
+                            match handlerResponse with
+                            | Some response -> return mapper response
+                            | None -> return raise (MiddlewarePipelineException("HTTP handler did not yield a response"))
                         }
 
-                    let! context = execute pipeline context
+                    let! corsResponse = Middleware.cors context
 
-                    match context.Response with
-                    | None -> return raise (MiddlewarePipelineException("HTTP handler did not yield a response"))
-                    | Some response -> return enrichWithCorsOrigin response
+                    match corsResponse with
+                    | Some response -> return response
+                    | None -> return! execute enrichWithCorsOrigin context
                 with
                 | ex -> return errorHandler context ex
             }

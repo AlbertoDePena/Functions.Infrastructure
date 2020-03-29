@@ -11,29 +11,38 @@ type MiddlewarePipelineException(message : string) =
 type ValidateBearerTokenException(message : string) =
     inherit Exception(message)
 
-type BearerToken = string
-
-type ValidateBearerToken = BearerToken -> Async<ClaimsPrincipal>
-
 type HttpFunctionContext = {
     Logger : ILogger
     Request : HttpRequestMessage
-    Response : HttpResponseMessage option
-    ClaimsPrincipal : ClaimsPrincipal option 
-} 
+    GetClaimsPrincipal : HttpFunctionContext -> Async<ClaimsPrincipal option> } 
 
-type HttpHandler = HttpFunctionContext -> Async<HttpFunctionContext>
+type GetClaimsPrincipal = HttpFunctionContext -> Async<ClaimsPrincipal option>
+
+type HttpHandler = HttpFunctionContext -> Async<HttpResponseMessage option>
 
 type ErrorHandler = HttpFunctionContext -> exn -> HttpResponseMessage
 
-type ExecutePipeline = ErrorHandler -> HttpHandler list -> HttpFunctionContext -> Async<HttpResponseMessage>
+type ExecutePipeline = ErrorHandler -> HttpHandler -> HttpFunctionContext -> Async<HttpResponseMessage>
 
 [<RequireQualifiedAccess>]
 module HttpFunctionContext =
 
+    /// **Description**
+    /// 
+    /// Bootstrap HttpFunctionContext without GetClaimsPrincipal function
+    /// 
+    /// Note: the ClaimsPrincipal will not be available
     let bootstrap logger request = {
         Logger = logger
         Request = request
-        Response = None
-        ClaimsPrincipal = None
-    }
+        GetClaimsPrincipal = fun _ -> Async.singleton None }
+
+    // **Description**
+    /// 
+    /// Bootstrap HttpFunctionContext with GetClaimsPrincipal function
+    /// 
+    /// Note: the ClaimsPrincipal will be available
+    let bootstrapWithSecurity logger request getClaimsPrincipal = {
+        Logger = logger
+        Request = request
+        GetClaimsPrincipal = getClaimsPrincipal }

@@ -6,6 +6,7 @@ open Microsoft.Azure.WebJobs.Extensions.Http
 open Microsoft.Extensions.Logging
 open System.Net.Http
 open System.Net
+open System
 open System.Security.Claims
 
 module Program =
@@ -18,12 +19,24 @@ module Program =
             then context.Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message)
             else context.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex)
 
-    let validateBearerToken : ValidateBearerToken =
-        fun token ->
-            let claims = [Claim(ClaimTypes.Name, "Test User")]                
-            let identity = ClaimsIdentity(claims, "Bearer")
+    let getClaimsPrincipal : GetClaimsPrincipal =
+        fun context ->
+            async {
+                let bearerToken = 
+                    context.Request.Headers 
+                    |> Seq.tryFind (fun q -> q.Key = "Authorization")
+                    |> Option.map (fun q -> if Seq.isEmpty q.Value then String.Empty else q.Value |> Seq.head)
+                    |> Option.map (fun h -> h.Substring("Bearer ".Length).Trim())
+                    |> Option.defaultWith (fun _ -> raise (ValidateBearerTokenException("Bearer token is required")))
 
-            ClaimsPrincipal(identity) |> Async.singleton
+                //TODO: validate bearerToken
+                context.Logger.LogInformation(sprintf "Bearer Token: %s" bearerToken)
+
+                let claims = [Claim(ClaimTypes.Name, "Test User")]                
+                let identity = ClaimsIdentity(claims, "Bearer")
+
+                return identity |> ClaimsPrincipal |> Some 
+            }
 
     [<FunctionName("HelloWorld")>]
     let helloWorld ([<HttpTrigger(AuthorizationLevel.Anonymous, "get", "options")>] request : HttpRequestMessage) (logger : ILogger) = 
@@ -36,12 +49,12 @@ module Program =
 
                         let response = context.Request.CreateResponse(HttpStatusCode.OK, "Hello World!")
 
-                        return { context with Response = Some response }
+                        return Some response
                     }
 
             return!
                 HttpFunctionContext.bootstrap logger request
-                |> MiddlewarePipeline.execute errorHandler [ Middleware.cors; helloWorldHandler ]
+                |> MiddlewarePipeline.execute errorHandler helloWorldHandler
         } |> Async.StartAsTask
 
     [<FunctionName("HelloLaz")>]
@@ -55,12 +68,12 @@ module Program =
 
                         let response = context.Request.CreateResponse(HttpStatusCode.OK, "Hello Laz!")
 
-                        return { context with Response = Some response }
+                        return Some response
                     }
 
             return!
                 HttpFunctionContext.bootstrap logger request
-                |> MiddlewarePipeline.execute errorHandler [ Middleware.cors; helloLazHandler ]
+                |> MiddlewarePipeline.execute errorHandler helloLazHandler
         } |> Async.StartAsTask    
 
     [<FunctionName("CurrentUser")>]
@@ -72,19 +85,19 @@ module Program =
                     async {
                         context.Logger.LogInformation("Handling CurrentUser request...")
 
+                        let! claimsPrincipal = context.GetClaimsPrincipal context
+
                         let user = 
-                            context.ClaimsPrincipal 
+                            claimsPrincipal
                             |> Option.map (fun principal -> principal.Identity.Name)
                             |> Option.defaultWith (fun _ -> invalidOp "ClaimsPrincipal not available")
 
                         let response = context.Request.CreateResponse(HttpStatusCode.OK, sprintf "The current user is: %s" user)
 
-                        return { context with Response = Some response }
+                        return Some response
                     }
 
-            let pipeline = [ Middleware.cors; Middleware.security validateBearerToken; currentUserHandler ]
-
             return!
-                HttpFunctionContext.bootstrap logger request
-                |> MiddlewarePipeline.execute errorHandler pipeline
+                HttpFunctionContext.bootstrapWithSecurity logger request getClaimsPrincipal
+                |> MiddlewarePipeline.execute errorHandler currentUserHandler
         } |> Async.StartAsTask      
