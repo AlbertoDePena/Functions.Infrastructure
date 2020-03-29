@@ -17,12 +17,7 @@ type HttpHandler = HttpFunctionContext -> Async<HttpResponseMessage option>
 
 type ErrorHandler = HttpFunctionContext -> exn -> HttpResponseMessage
 
-type HttpHandlerOptions = {
-    UseCors : bool
-    HandleError : ErrorHandler
-    Handle : HttpHandler }
-
-type HandleRequest = HttpHandlerOptions -> HttpFunctionContext -> Async<HttpResponseMessage>
+type HandleRequest = ErrorHandler -> HttpHandler -> HttpFunctionContext -> Async<HttpResponseMessage>
 
 [<RequireQualifiedAccess>]
 module Async =
@@ -82,11 +77,13 @@ module HttpHandler =
     /// 
     /// **Parameters**
     /// 
-    /// options: HttpHandlerOptions
+    /// handleError: ErrorHandler
+    /// 
+    /// handle: HttpHandler
     /// 
     /// context: HttpFunctionContext
     let handle : HandleRequest = 
-        fun options context ->
+        fun handleError handle context ->
             async {
                 try
                     let enrichWithCorsOrigin (response : HttpResponseMessage) =
@@ -96,21 +93,18 @@ module HttpHandler =
                         context.Request.CreateErrorResponse(
                             HttpStatusCode.InternalServerError, "HTTP handler did not yield a response")
 
-                    let execute mapper context =
+                    let execute context =
                         async {
-                            let! handlerResponse = options.Handle context
+                            let! handlerResponse = handle context
                             match handlerResponse with
-                            | Some response -> return mapper response
+                            | Some response -> return enrichWithCorsOrigin response
                             | None -> return errorResponse
                         }
 
-                    if options.UseCors then
-                        let! corsResponse = cors context
-                        match corsResponse with
-                        | Some response -> return response
-                        | None -> return! execute enrichWithCorsOrigin context
-                    else
-                        return! execute id context
+                    let! corsResponse = cors context
+                    match corsResponse with
+                    | Some response -> return response
+                    | None -> return! execute context
                 with
-                | ex -> return options.HandleError context ex
+                | ex -> return handleError context ex
             }

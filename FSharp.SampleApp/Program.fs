@@ -49,14 +49,9 @@ module Program =
                         return Some response
                     }
             
-            let options = { 
-                UseCors = false 
-                HandleError = errorHandler
-                Handle = helloWorldHandler }
-
             return!
                 HttpFunctionContext.bootstrap logger request
-                |> HttpHandler.handle options
+                |> HttpHandler.handle errorHandler helloWorldHandler
         } |> Async.StartAsTask
 
     [<FunctionName("HelloLaz")>]
@@ -73,14 +68,9 @@ module Program =
                         return Some response
                     }
 
-            let options = { 
-                UseCors = true 
-                HandleError = errorHandler
-                Handle = helloLazHandler }
-
             return!
                 HttpFunctionContext.bootstrap logger request
-                |> HttpHandler.handle options
+                |> HttpHandler.handle errorHandler helloLazHandler
         } |> Async.StartAsTask    
 
     [<FunctionName("CurrentUser")>]
@@ -104,12 +94,7 @@ module Program =
                         return Some response
                     }
 
-            let options = { 
-                UseCors = true 
-                HandleError = errorHandler
-                Handle = currentUserHandler }
-
             return!
                 HttpFunctionContext.bootstrapWithSecurity logger request getClaimsPrincipal
-                |> HttpHandler.handle options
+                |> HttpHandler.handle errorHandler currentUserHandler
         } |> Async.StartAsTask      
