@@ -53,13 +53,11 @@ module HttpHandler =
     let private getCorsResponse (request : HttpRequestMessage) =
         if String.Equals(request.Method.Method, "OPTIONS", StringComparison.OrdinalIgnoreCase) then
             let response = request.CreateResponse(HttpStatusCode.OK, "Hello from the other side")
-
             if request.Headers.Contains("Origin") then
                 response.Headers.Add("Access-Control-Allow-Credentials", "true")
                 response.Headers.Add("Access-Control-Allow-Origin", "*")
                 response.Headers.Add("Access-Control-Allow-Methods", "GET, HEAD, OPTIONS, PUT, PATCH, POST, DELETE")
-                response.Headers.Add("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
-               
+                response.Headers.Add("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")               
             Some response
         else None
 
@@ -93,18 +91,14 @@ module HttpHandler =
                         context.Request.CreateErrorResponse(
                             HttpStatusCode.InternalServerError, "HTTP handler did not yield a response")
 
-                    let execute context =
-                        async {
-                            let! handlerResponse = handle context
-                            match handlerResponse with
-                            | Some response -> return enrichWithCorsOrigin response
-                            | None -> return errorResponse
-                        }
-
                     let! corsResponse = cors context
                     match corsResponse with
                     | Some response -> return response
-                    | None -> return! execute context
+                    | None -> 
+                        let! handlerResponse = handle context
+                        match handlerResponse with
+                        | Some response -> return enrichWithCorsOrigin response
+                        | None -> return errorResponse
                 with
                 | ex -> return handleError context ex
             }
