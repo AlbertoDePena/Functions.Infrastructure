@@ -14,10 +14,7 @@ module Program =
     let errorHandler : ErrorHandler =
         fun context ex ->
             context.Logger.LogError(ex.Message)
-
-            if ex :? ValidateBearerTokenException 
-            then context.Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message)
-            else context.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex)
+            context.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex)
 
     let getClaimsPrincipal : GetClaimsPrincipal =
         fun context ->
@@ -27,7 +24,7 @@ module Program =
                     |> Seq.tryFind (fun q -> q.Key = "Authorization")
                     |> Option.map (fun q -> if Seq.isEmpty q.Value then String.Empty else q.Value |> Seq.head)
                     |> Option.map (fun h -> h.Substring("Bearer ".Length).Trim())
-                    |> Option.defaultWith (fun _ -> raise (ValidateBearerTokenException("Bearer token is required")))
+                    |> Option.defaultWith (fun _ -> invalidOp "Bearer token is required")
 
                 //TODO: validate bearerToken
                 context.Logger.LogInformation(sprintf "Bearer Token: %s" bearerToken)
@@ -51,10 +48,15 @@ module Program =
 
                         return Some response
                     }
+            
+            let options = { 
+                UseCors = false 
+                HandleError = errorHandler
+                Handle = helloWorldHandler }
 
             return!
                 HttpFunctionContext.bootstrap logger request
-                |> MiddlewarePipeline.execute errorHandler helloWorldHandler
+                |> HttpHandler.handle options
         } |> Async.StartAsTask
 
     [<FunctionName("HelloLaz")>]
@@ -71,9 +73,14 @@ module Program =
                         return Some response
                     }
 
+            let options = { 
+                UseCors = true 
+                HandleError = errorHandler
+                Handle = helloLazHandler }
+
             return!
                 HttpFunctionContext.bootstrap logger request
-                |> MiddlewarePipeline.execute errorHandler helloLazHandler
+                |> HttpHandler.handle options
         } |> Async.StartAsTask    
 
     [<FunctionName("CurrentUser")>]
@@ -97,7 +104,12 @@ module Program =
                         return Some response
                     }
 
+            let options = { 
+                UseCors = true 
+                HandleError = errorHandler
+                Handle = currentUserHandler }
+
             return!
                 HttpFunctionContext.bootstrapWithSecurity logger request getClaimsPrincipal
-                |> MiddlewarePipeline.execute errorHandler currentUserHandler
+                |> HttpHandler.handle options
         } |> Async.StartAsTask      
