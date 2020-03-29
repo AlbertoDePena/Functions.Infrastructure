@@ -6,7 +6,6 @@ open Microsoft.Azure.WebJobs.Extensions.Http
 open Microsoft.Extensions.Logging
 open System.Net.Http
 open System.Net
-open System
 open System.Security.Claims
 
 module Program =
@@ -20,10 +19,7 @@ module Program =
         fun context ->
             async {
                 let bearerToken = 
-                    context.Request.Headers 
-                    |> Seq.tryFind (fun q -> q.Key = "Authorization")
-                    |> Option.map (fun q -> if Seq.isEmpty q.Value then String.Empty else q.Value |> Seq.head)
-                    |> Option.map (fun h -> h.Substring("Bearer ".Length).Trim())
+                    context.Request.TryGetBearerToken ()
                     |> Option.defaultWith (fun _ -> invalidOp "Bearer token is required")
 
                 //TODO: validate bearerToken
