@@ -1,6 +1,6 @@
-﻿using System;
-using System.Net;
-using System.Net.Http;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace Numaka.Functions.Infrastructure
@@ -10,54 +10,52 @@ namespace Numaka.Functions.Infrastructure
     /// </summary>
     public class CorsMiddleware : HttpMiddleware
     {
-        /// <inhericdoc />
+        /// <inheritdoc />
         public override async Task InvokeAsync(IHttpFunctionContext context)
         {
-            var response = context.Request.GetCorsResponse();
+            var actionResult = context.Request.GetCorsActionResult();
 
-            if (response == null)
+            if (actionResult == null)
             {
                 await Next.InvokeAsync(context);
 
-                if (context.Response != null)
+                if (context.ActionResult != null)
                 {
-                    context.Response = context.Response.EnrichWithCorsOrigin();
+                    context.Request.EnrichWithCorsOrigin();
                 }
             }
             else
             {
-                context.Response = response;
+                context.ActionResult = actionResult;
             }
         }
     }
 
     internal static class CorsExtensions
     {
-        public static HttpResponseMessage GetCorsResponse(this HttpRequestMessage request)
+        public static IActionResult GetCorsActionResult(this HttpRequest request)
         {
-            if (string.Equals(request.Method.Method, "OPTIONS", StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(request.Method, "OPTIONS", StringComparison.OrdinalIgnoreCase))
             {
-                var response = request.CreateResponse(HttpStatusCode.OK, "Hello from the other side");
+                var actionResult = new OkObjectResult("Hello from the other side");
 
-                if (request.Headers.Contains("Origin"))
+                if (request.Headers.ContainsKey("Origin"))
                 {
-                    response.Headers.Add("Access-Control-Allow-Credentials", "true");
-                    response.Headers.Add("Access-Control-Allow-Origin", "*");
-                    response.Headers.Add("Access-Control-Allow-Methods", "GET, HEAD, OPTIONS, PUT, PATCH, POST, DELETE");
-                    response.Headers.Add("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+                    request.HttpContext.Response.Headers.Add("Access-Control-Allow-Credentials", "true");
+                    request.HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+                    request.HttpContext.Response.Headers.Add("Access-Control-Allow-Methods", "GET, HEAD, OPTIONS, PUT, PATCH, POST, DELETE");
+                    request.HttpContext.Response.Headers.Add("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
                 }
 
-                return response;
+                return actionResult;
             }
 
             return null;
         }
 
-        public static HttpResponseMessage EnrichWithCorsOrigin(this HttpResponseMessage response)
+        public static void EnrichWithCorsOrigin(this HttpRequest request)
         {
-            response.Headers.Add("Access-Control-Allow-Origin", "*");
-
-            return response;
+            request.HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
         }
     }
 }

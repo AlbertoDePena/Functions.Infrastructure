@@ -4,8 +4,9 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace SampleApp
 {
@@ -19,8 +20,8 @@ namespace SampleApp
         }
 
         [FunctionName("OdometerReading")]
-        public async Task<HttpResponseMessage> Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "GET", "OPTIONS")] HttpRequestMessage request, ILogger logger)
+        public async Task<IActionResult> Run(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "options")] HttpRequest request, ILogger logger)
         {
             var bootstrapper = _serviceProvider.GetService<IHttpFunctionContextBootstrapper>();
             var pipeline = _serviceProvider.GetService<IMiddlewarePipeline>();

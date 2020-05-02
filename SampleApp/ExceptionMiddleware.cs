@@ -1,9 +1,8 @@
 using Numaka.Functions.Infrastructure;
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using System;
+using Microsoft.AspNetCore.Mvc;
 
 namespace SampleApp
 {
@@ -26,7 +25,7 @@ namespace SampleApp
 
                 context.Logger.LogError(e, message);
 
-                context.Response = context.Request.CreateErrorResponse(HttpStatusCode.BadRequest, message);
+                context.ActionResult = new BadRequestObjectResult(message);
             }
         }
     }

@@ -3,11 +3,16 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <AzureFunctionsVersion>v3</AzureFunctionsVersion>
+    <_FunctionsSkipCleanOutput>true</_FunctionsSkipCleanOutput>
+    <!--Start function app-->
+    <StartAction>Program</StartAction>
+    <StartProgram>$(APPDATA)\npm\node_modules\azure-functions-core-tools\bin\func.exe</StartProgram>
+    <StartArguments>start</StartArguments>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.0.0" />
-    <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="3.0.3" />
+    <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="3.0.6" />
   </ItemGroup>
 
   <ItemGroup>

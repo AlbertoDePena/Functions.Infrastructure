@@ -1,5 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
-using System.Net.Http;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System.Security.Claims;
 
 namespace Numaka.Functions.Infrastructure
@@ -12,12 +13,12 @@ namespace Numaka.Functions.Infrastructure
         /// <summary>
         /// The HTTP request
         /// </summary>
-        HttpRequestMessage Request { get; }
+        HttpRequest Request { get; }
 
         /// <summary>
-        /// The HTTP response
+        /// The action result
         /// </summary>
-        HttpResponseMessage Response { get; set; }
+        IActionResult ActionResult { get; set; }
 
         /// <summary>
         /// Microsoft logger

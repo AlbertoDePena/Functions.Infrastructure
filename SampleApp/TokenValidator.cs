@@ -6,7 +6,7 @@ namespace SampleApp
 {
     public class TokenValidator : ITokenValidator
     {
-        public Task<ClaimsPrincipal> ValidateAsync(string bearerToken)
+        public Task<ClaimsPrincipal> ValidateTokenAsync(string token)
         {
             var claims = new Claim[]
             {

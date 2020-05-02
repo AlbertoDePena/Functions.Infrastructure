@@ -4,10 +4,10 @@ namespace SampleApp
 {
     public class OdometerData
     {
-        public int Value { get; set; }
+        public double Value { get; set; }
+
+        public string VIN { get; set; }
 
         public DateTimeOffset Date { get; set; }
-
-        public string Message { get; set; }
     }
 }

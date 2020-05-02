@@ -1,8 +1,7 @@
 ﻿using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Numaka.Functions.Infrastructure
 {
@@ -22,23 +21,23 @@ namespace Numaka.Functions.Infrastructure
             _tokenValidator = tokenValidator ?? throw new ArgumentNullException(nameof(tokenValidator));
         }
 
-        /// <inhericdoc />
+        /// <inheritdoc />
         public override async Task InvokeAsync(IHttpFunctionContext context)
         {
             var header = context.Request.Headers
                 .FirstOrDefault(q =>
-                    q.Key.Equals("Authorization") && q.Value.Any());
+                    q.Key.Equals("Authorization") && q.Value.Count > 0);
 
-            var bearerToken = header.Value == null ? string.Empty : header.Value.FirstOrDefault()?.Substring("Bearer ".Length).Trim();
+            var bearerToken = header.Value.FirstOrDefault()?.Substring("Bearer ".Length).Trim() ?? string.Empty;
 
             if (string.IsNullOrWhiteSpace(bearerToken))
             {
-                context.Response = context.Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Bearer token is required");
+                context.ActionResult = new BadRequestObjectResult("Bearer token is required");
 
                 return;
             }
             
-            context.ClaimsPrincipal = await _tokenValidator.ValidateAsync(bearerToken);
+            context.ClaimsPrincipal = await _tokenValidator.ValidateTokenAsync(bearerToken);
             
             if (Next != null)
             {
