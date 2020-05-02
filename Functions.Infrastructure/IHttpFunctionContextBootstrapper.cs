@@ -1,5 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
-using System.Net.Http;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 
 namespace Numaka.Functions.Infrastructure
 {
@@ -14,6 +14,6 @@ namespace Numaka.Functions.Infrastructure
         /// <param name="request"></param>
         /// <param name="logger"></param>
         /// <returns></returns>
-        IHttpFunctionContext Bootstrap(HttpRequestMessage request, ILogger logger);
+        IHttpFunctionContext Bootstrap(HttpRequest request, ILogger logger);
     }
 }

@@ -9,9 +9,9 @@ namespace Numaka.Functions.Infrastructure
     public interface ITokenValidator
     {
         /// <summary>
-        /// Validate a bearer token
+        /// Validate a token
         /// </summary>
-        /// <param name="bearerToken"></param>
-        Task<ClaimsPrincipal> ValidateAsync(string bearerToken);
+        /// <param name="token"></param>
+        Task<ClaimsPrincipal> ValidateTokenAsync(string token);
     }
 }

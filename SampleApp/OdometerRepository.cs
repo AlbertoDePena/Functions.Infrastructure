@@ -7,18 +7,17 @@ namespace SampleApp
     {
         private readonly Random _random;
 
-        public OdometorRepository()
-        {
-            _random = new Random();
-        }
+        public OdometorRepository() => _random = new Random();
 
-        public Task<OdometerData> GetOdometerReadingAsync(string userName)
+        public Task<OdometerData> GetOdometerReadingAsync(string vin)
         {
-            var value = _random.Next(10000, 20000);
+            var value = GetRandomNumber(0, 200000);
 
-            var data = new OdometerData { Value = value, Date = DateTimeOffset.UtcNow, Message = $"Odometer readings for {userName}" };
+            var data = new OdometerData { VIN = vin, Value = value, Date = DateTimeOffset.UtcNow };
 
             return Task.FromResult(data);
         }
+
+        private double GetRandomNumber(double minimum, double maximum) => (_random.NextDouble() * (maximum - minimum)) + minimum;
     }
 }

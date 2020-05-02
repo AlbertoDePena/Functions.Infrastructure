@@ -2,7 +2,7 @@ using System;
 using Xunit;
 using NSubstitute;
 using Microsoft.Extensions.Logging;
-using System.Net.Http;
+using Microsoft.AspNetCore.Http;
 
 namespace Numaka.Functions.Infrastructure.Tests
 {
@@ -17,7 +17,7 @@ namespace Numaka.Functions.Infrastructure.Tests
         [Fact]
         public void Constructor_With_Null_Logger_Should_Throw_Exception()
         {
-            Assert.Throws<ArgumentNullException>(() => new HttpFunctionContext(Substitute.For<HttpRequestMessage>(), null));
+            Assert.Throws<ArgumentNullException>(() => new HttpFunctionContext(Substitute.For<HttpRequest>(), null));
         }
     }
 }

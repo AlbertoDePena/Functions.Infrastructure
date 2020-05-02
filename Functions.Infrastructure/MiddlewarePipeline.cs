@@ -1,13 +1,13 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
+using System.Web.Http;
 
 namespace Numaka.Functions.Infrastructure
 {
-    /// <inhericdoc />
+    /// <inheritdoc />
     public class MiddlewarePipeline : IMiddlewarePipeline
     {
         private readonly List<HttpMiddleware> _pipeline;
@@ -15,12 +15,9 @@ namespace Numaka.Functions.Infrastructure
         /// <summary>
         /// Constructor
         /// </summary>
-        public MiddlewarePipeline()
-        {
-            _pipeline = new List<HttpMiddleware>();
-        }
+        public MiddlewarePipeline() => _pipeline = new List<HttpMiddleware>();
 
-        /// <inhericdoc />
+        /// <inheritdoc />
         public void Register(HttpMiddleware middleware)
         {
             if (_pipeline.Count > 0)
@@ -31,8 +28,8 @@ namespace Numaka.Functions.Infrastructure
             _pipeline.Add(middleware);
         }
 
-        /// <inhericdoc />
-        public async Task<HttpResponseMessage> ExecuteAsync(IHttpFunctionContext context)
+        /// <inheritdoc />
+        public async Task<IActionResult> ExecuteAsync(IHttpFunctionContext context)
         {
             try
             {
@@ -40,9 +37,9 @@ namespace Numaka.Functions.Infrastructure
                 {
                     await _pipeline[0].InvokeAsync(context);
 
-                    if (context.Response != null)
+                    if (context.ActionResult != null)
                     {
-                        return context.Response;
+                        return context.ActionResult;
                     }
                 }
 
@@ -51,8 +48,8 @@ namespace Numaka.Functions.Infrastructure
             catch (Exception e)
             {
                 context.Logger.LogError(e, e.Message);
-                
-                return context.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e);
+
+                return new InternalServerErrorResult();
             }
         }
     }

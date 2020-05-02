@@ -1,12 +1,12 @@
-﻿using Microsoft.Extensions.Logging;
-using System.Net.Http;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 
 namespace Numaka.Functions.Infrastructure
 {
-    /// <inhericdoc />
+    /// <inheritdoc />
     public class HttpFunctionContextBootstrapper : IHttpFunctionContextBootstrapper
     {
-        /// <inhericdoc />
-        public IHttpFunctionContext Bootstrap(HttpRequestMessage request, ILogger logger) => new HttpFunctionContext(request, logger);
+        /// <inheritdoc />
+        public IHttpFunctionContext Bootstrap(HttpRequest request, ILogger logger) => new HttpFunctionContext(request, logger);
     }
 }

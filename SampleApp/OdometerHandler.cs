@@ -1,9 +1,9 @@
 ﻿using Numaka.Functions.Infrastructure;
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using System;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Primitives;
 
 namespace SampleApp
 {
@@ -20,24 +20,31 @@ namespace SampleApp
         {
             if (context.ClaimsPrincipal == null)
             {
-                context.Logger.LogWarning("Context does not have a user");
-                
-                context.Response = context.Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Not good");
+                context.ActionResult = new BadRequestObjectResult("Context does not have a claims principal");
 
                 return;
             }
 
-            context.Logger.LogInformation($"Odometer request received for:  '{context.ClaimsPrincipal.Identity.Name}'");
+            context.Request.Query.TryGetValue("vin", out StringValues vin);
+
+            if (string.IsNullOrWhiteSpace(vin))
+            {
+                context.ActionResult = new BadRequestObjectResult("vin is required");
+
+                return;
+            }
+
+            context.Logger.LogInformation("Odometer request received for: {UserName}", context.ClaimsPrincipal.Identity.Name);
             
-            var odometerDto = await _getOdometerReading.GetOdometerReadingAsync(context.ClaimsPrincipal.Identity.Name);
+            var odometerDto = await _getOdometerReading.GetOdometerReadingAsync(vin);
 
             if (odometerDto == null)
             {
-                context.Response = context.Request.CreateResponse(HttpStatusCode.NotFound, "Odometor info not found");
+                context.ActionResult = new NotFoundObjectResult("Odometor info not found");
             }
             else
             {
-                context.Response = context.Request.CreateResponse(HttpStatusCode.OK, odometerDto);
+                context.ActionResult = new OkObjectResult(odometerDto);
             }
         }
     }

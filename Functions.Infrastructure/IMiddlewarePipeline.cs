@@ -1,4 +1,4 @@
-﻿using System.Net.Http;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace Numaka.Functions.Infrastructure
@@ -18,6 +18,6 @@ namespace Numaka.Functions.Infrastructure
         /// </summary>
         /// <param name="context">The HTTP function context</param>
         /// <returns></returns>
-        Task<HttpResponseMessage> ExecuteAsync(IHttpFunctionContext context);
+        Task<IActionResult> ExecuteAsync(IHttpFunctionContext context);
     }
 }

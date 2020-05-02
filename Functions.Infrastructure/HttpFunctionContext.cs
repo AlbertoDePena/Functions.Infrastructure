@@ -1,11 +1,12 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
-using System.Net.Http;
 using System.Security.Claims;
 
 namespace Numaka.Functions.Infrastructure
 {
-    /// <inhericdoc />
+    /// <inheritdoc/>
     public class HttpFunctionContext : IHttpFunctionContext
     {
         /// <summary>
@@ -13,22 +14,22 @@ namespace Numaka.Functions.Infrastructure
         /// </summary>
         /// <param name="request"></param>
         /// <param name="logger"></param>
-        public HttpFunctionContext(HttpRequestMessage request, ILogger logger)
+        public HttpFunctionContext(HttpRequest request, ILogger logger)
         {
             Request = request ?? throw new ArgumentNullException(nameof(request));
             Logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        /// <inhericdoc />
-        public HttpRequestMessage Request { get; }
+        /// <inheritdoc/>
+        public HttpRequest Request { get; }
 
-        /// <inhericdoc />
-        public HttpResponseMessage Response { get; set; }
+        /// <inheritdoc/>
+        public IActionResult ActionResult { get; set; }
 
-        /// <inhericdoc />
+        /// <inheritdoc/>
         public ILogger Logger { get; }
 
-        /// <inhericdoc />
+        /// <inheritdoc/>
         public ClaimsPrincipal ClaimsPrincipal { get; set; }
     }
 }

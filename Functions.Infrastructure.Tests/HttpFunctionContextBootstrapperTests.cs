@@ -1,7 +1,7 @@
 ﻿using Xunit;
 using NSubstitute;
-using System.Net.Http;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Http;
 
 namespace Numaka.Functions.Infrastructure.Tests
 {
@@ -12,7 +12,7 @@ namespace Numaka.Functions.Infrastructure.Tests
         {
             var httpFunctionContextFactory = new HttpFunctionContextBootstrapper();
 
-            var httpFunctionContext = httpFunctionContextFactory.Bootstrap(Substitute.For<HttpRequestMessage>(), Substitute.For<ILogger>());
+            var httpFunctionContext = httpFunctionContextFactory.Bootstrap(Substitute.For<HttpRequest>(), Substitute.For<ILogger>());
 
             Assert.NotNull(httpFunctionContext);
         }
@@ -22,7 +22,7 @@ namespace Numaka.Functions.Infrastructure.Tests
         {
             var httpFunctionContextFactory = new HttpFunctionContextBootstrapper();
 
-            var httpFunctionContext = httpFunctionContextFactory.Bootstrap(Substitute.For<HttpRequestMessage>(), Substitute.For<ILogger>());
+            var httpFunctionContext = httpFunctionContextFactory.Bootstrap(Substitute.For<HttpRequest>(), Substitute.For<ILogger>());
 
             Assert.NotNull(httpFunctionContext.Request);
         }
@@ -32,27 +32,27 @@ namespace Numaka.Functions.Infrastructure.Tests
         {
             var httpFunctionContextFactory = new HttpFunctionContextBootstrapper();
 
-            var httpFunctionContext = httpFunctionContextFactory.Bootstrap(Substitute.For<HttpRequestMessage>(), Substitute.For<ILogger>());
+            var httpFunctionContext = httpFunctionContextFactory.Bootstrap(Substitute.For<HttpRequest>(), Substitute.For<ILogger>());
 
             Assert.NotNull(httpFunctionContext.Logger);
         }
 
         [Fact]
-        public void Bootstrap_With_Valid_Inputs_Should_Have_A_Null_Response()
+        public void Bootstrap_With_Valid_Inputs_Should_Have_A_Null_ActionResult()
         {
             var httpFunctionContextFactory = new HttpFunctionContextBootstrapper();
 
-            var httpFunctionContext = httpFunctionContextFactory.Bootstrap(Substitute.For<HttpRequestMessage>(), Substitute.For<ILogger>());
+            var httpFunctionContext = httpFunctionContextFactory.Bootstrap(Substitute.For<HttpRequest>(), Substitute.For<ILogger>());
 
-            Assert.Null(httpFunctionContext.Response);
+            Assert.Null(httpFunctionContext.ActionResult);
         }
 
         [Fact]
-        public void Bootstrap_With_Valid_Inputs_Should_Have_A_Null_User()
+        public void Bootstrap_With_Valid_Inputs_Should_Have_A_Null_ClaimsPrincipal()
         {
             var httpFunctionContextFactory = new HttpFunctionContextBootstrapper();
 
-            var httpFunctionContext = httpFunctionContextFactory.Bootstrap(Substitute.For<HttpRequestMessage>(), Substitute.For<ILogger>());
+            var httpFunctionContext = httpFunctionContextFactory.Bootstrap(Substitute.For<HttpRequest>(), Substitute.For<ILogger>());
 
             Assert.Null(httpFunctionContext.ClaimsPrincipal);
         }
