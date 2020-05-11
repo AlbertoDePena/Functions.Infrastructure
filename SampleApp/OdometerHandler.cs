@@ -35,17 +35,13 @@ namespace SampleApp
             }
 
             context.Logger.LogInformation("Odometer request received for: {UserName}", context.ClaimsPrincipal.Identity.Name);
-            
+
             var odometerDto = await _getOdometerReading.GetOdometerReadingAsync(vin);
 
-            if (odometerDto == null)
-            {
-                context.ActionResult = new NotFoundObjectResult("Odometor info not found");
-            }
-            else
-            {
-                context.ActionResult = new OkObjectResult(odometerDto);
-            }
+            context.ActionResult =
+                odometerDto == null ?
+                (new NotFoundObjectResult("Odometor info not found") as IActionResult) :
+                (new OkObjectResult(odometerDto) as IActionResult);
         }
     }
 }
