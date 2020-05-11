@@ -39,10 +39,7 @@ namespace Numaka.Functions.Infrastructure
             
             context.ClaimsPrincipal = await _tokenValidator.ValidateTokenAsync(bearerToken);
             
-            if (Next != null)
-            {
-                await Next.InvokeAsync(context);
-            }
+            await Next?.InvokeAsync(context);
         }
     }
 }

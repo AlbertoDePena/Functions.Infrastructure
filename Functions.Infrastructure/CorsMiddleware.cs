@@ -17,7 +17,7 @@ namespace Numaka.Functions.Infrastructure
 
             if (actionResult == null)
             {
-                await Next.InvokeAsync(context);
+                await Next?.InvokeAsync(context);
 
                 if (context.ActionResult != null)
                 {
@@ -53,9 +53,6 @@ namespace Numaka.Functions.Infrastructure
             return null;
         }
 
-        public static void EnrichWithCorsOrigin(this HttpRequest request)
-        {
-            request.HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
-        }
+        public static void EnrichWithCorsOrigin(this HttpRequest request) => request.HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
     }
 }

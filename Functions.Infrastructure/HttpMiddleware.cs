@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace Numaka.Functions.Infrastructure
 {
@@ -17,15 +16,6 @@ namespace Numaka.Functions.Infrastructure
         /// Constructor
         /// </summary>
         protected HttpMiddleware() { }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="next"></param>
-        protected HttpMiddleware(HttpMiddleware next)
-        {
-            Next = next ?? throw new ArgumentNullException(nameof(next));
-        }
 
         /// <summary>
         /// Invoke a HTTP request
