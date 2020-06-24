@@ -26,7 +26,7 @@ namespace Numaka.Functions.Infrastructure
         ILogger Logger { get; }
 
         /// <summary>
-        /// The claims principal
+        /// The claims principal. The HTTP Context has the function's claims principal which is not the same as this one.
         /// </summary>
         ClaimsPrincipal ClaimsPrincipal { get; set; }
     }
