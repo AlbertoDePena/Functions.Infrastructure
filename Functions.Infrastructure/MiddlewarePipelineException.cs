@@ -11,7 +11,7 @@ namespace Numaka.Functions.Infrastructure
         /// Constructor
         /// </summary>
         public MiddlewarePipelineException()
-            : this("Either the middleware pipeline did not have any middlewares registered or the middleware invocation did not yield an action result") { }
+            : this("Either the middleware pipeline did not have any registered middlewares or the middleware invocation did not yield an action result") { }
 
         /// <summary>
         /// Constructor
