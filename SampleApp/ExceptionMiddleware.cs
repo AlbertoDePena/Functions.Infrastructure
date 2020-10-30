@@ -12,10 +12,7 @@ namespace SampleApp
         {
             try
             {
-                if (Next != null)
-                {
-                    await Next.InvokeAsync(context);
-                }
+                await Next?.InvokeAsync(context);
             }
             catch (Exception e)
             {
