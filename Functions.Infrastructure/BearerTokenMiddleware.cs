@@ -1,24 +1,23 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using System;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Numaka.Functions.Infrastructure
 {
     /// <summary>
-    /// Security middleware
+    /// Bearer Token middleware
     /// </summary>
-    public class SecurityMiddleware : HttpMiddleware
+    public class BearerTokenMiddleware : HttpMiddleware
     {
-        private readonly ITokenValidator _tokenValidator;
+        private readonly IBearerTokenValidator _bearerTokenValidator;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="tokenValidator"></param>
-        public SecurityMiddleware(ITokenValidator tokenValidator)
+        /// <param name="bearerTokenValidator"></param>
+        public BearerTokenMiddleware(IBearerTokenValidator bearerTokenValidator)
         {
-            _tokenValidator = tokenValidator ?? throw new ArgumentNullException(nameof(tokenValidator));
+            _bearerTokenValidator = bearerTokenValidator ?? throw new ArgumentNullException(nameof(bearerTokenValidator));
         }
 
         /// <inheritdoc />
@@ -30,14 +29,10 @@ namespace Numaka.Functions.Infrastructure
 
             var bearerToken = header.Value.FirstOrDefault()?.Substring("Bearer ".Length).Trim() ?? string.Empty;
 
-            if (string.IsNullOrWhiteSpace(bearerToken))
+            if (!string.IsNullOrWhiteSpace(bearerToken))
             {
-                context.ActionResult = new BadRequestObjectResult("Bearer token is required");
-
-                return;
+                context.ClaimsPrincipal = await _bearerTokenValidator.ValidateAsync(bearerToken);
             }
-            
-            context.ClaimsPrincipal = await _tokenValidator.ValidateTokenAsync(bearerToken);
             
             await Next?.InvokeAsync(context);
         }

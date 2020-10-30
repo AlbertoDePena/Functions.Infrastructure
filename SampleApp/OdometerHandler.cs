@@ -20,7 +20,9 @@ namespace SampleApp
         {
             if (context.ClaimsPrincipal == null)
             {
-                context.ActionResult = new BadRequestObjectResult("Context does not have a claims principal");
+                context.Logger.LogDebug("Bearer Token or API Key must be provided");
+                
+                context.ActionResult = new UnauthorizedResult();
 
                 return;
             }
@@ -34,7 +36,9 @@ namespace SampleApp
                 return;
             }
 
-            context.Logger.LogInformation("Odometer request received for: {UserName}", context.ClaimsPrincipal.Identity.Name);
+            context.Logger.LogInformation(
+                "Odometer request received for: {UserName}", 
+                    context.ClaimsPrincipal.Identity.Name);
 
             var odometerDto = await _getOdometerReading.GetOdometerReadingAsync(vin);
 
