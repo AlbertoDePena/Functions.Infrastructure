@@ -4,16 +4,20 @@ using Numaka.Functions.Infrastructure;
 
 namespace SampleApp
 {
-    public class TokenValidator : ITokenValidator
+    public class ApiKeyValidator : IApiKeyValidator
     {
-        public Task<ClaimsPrincipal> ValidateTokenAsync(string token)
+        public string HeaderName => "X-API-KEY";
+
+        public Task<ClaimsPrincipal> ValidateAsync(string apiKey)
         {
+            //TODO: validate api key
+
             var claims = new Claim[]
             {
-                new Claim(ClaimTypes.Name, "Test User")
+                new Claim(ClaimTypes.Name, "API User")
             };
             
-            var identity = new ClaimsIdentity(claims, "Bearer");
+            var identity = new ClaimsIdentity(claims, "API Key");
 
             var principal = new ClaimsPrincipal(identity);
 

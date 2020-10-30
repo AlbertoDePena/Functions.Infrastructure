@@ -13,9 +13,11 @@ namespace SampleApp
             builder.Services.AddSingleton<IGetOdometerReading, OdometorRepository>();
             builder.Services.AddSingleton<OdometerHandler>();  
             builder.Services.AddSingleton<CorsMiddleware>();
-            builder.Services.AddSingleton<SecurityMiddleware>();
+            builder.Services.AddSingleton<BearerTokenMiddleware>();
+            builder.Services.AddSingleton<ApiKeyMiddleware>();
             builder.Services.AddSingleton<ExceptionMiddleware>();              
-            builder.Services.AddSingleton<ITokenValidator, TokenValidator>();        
+            builder.Services.AddSingleton<IBearerTokenValidator, BearerTokenValidator>();   
+            builder.Services.AddSingleton<IApiKeyValidator, ApiKeyValidator>();        
             builder.Services.AddSingleton<IHttpFunctionContextBootstrapper, HttpFunctionContextBootstrapper>();
             builder.Services.AddTransient<IMiddlewarePipeline, MiddlewarePipeline>();
         }
