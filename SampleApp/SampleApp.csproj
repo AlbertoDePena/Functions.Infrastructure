@@ -29,6 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Functions.CustomBindings\Functions.CustomBindings.csproj" />
     <ProjectReference Include="..\Functions.Infrastructure\Functions.Infrastructure.csproj" />
   </ItemGroup>
 

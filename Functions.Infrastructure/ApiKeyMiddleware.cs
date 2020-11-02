@@ -25,9 +25,7 @@ namespace Numaka.Functions.Infrastructure
         {
             var headerKey = _apiKeyValidator.HeaderName;
 
-            var header = context.Request.Headers.TryGetValue(headerKey, out StringValues apiKey);
-
-            if (!string.IsNullOrWhiteSpace(apiKey))
+            if (context.Request.Headers.TryGetValue(headerKey, out StringValues apiKey))
             {
                 context.ClaimsPrincipal = await _apiKeyValidator.ValidateAsync(apiKey);
             }
