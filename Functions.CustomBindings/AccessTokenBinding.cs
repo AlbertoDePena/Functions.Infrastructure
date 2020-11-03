@@ -15,24 +15,24 @@ namespace Functions.CustomBindings
         private const string AUTH_HEADER_NAME = "Authorization";
         private const string BEARER_PREFIX = "Bearer ";
 
-        private readonly string _clientId;
+        private readonly string _b2cClientId;
+        private readonly string _aadClientId;
 
         private readonly ConfigurationManager<OpenIdConnectConfiguration> _b2cConfigurationManager;
         private readonly ConfigurationManager<OpenIdConnectConfiguration> _aadConfigurationManager;
 
         public AccessTokenBinding()
         {
-            var b2cMetadataAddress = Environment.GetEnvironmentVariable("B2C_METADATA_ADDRESS");
-            var aadMetadataAddress = Environment.GetEnvironmentVariable("AAD_METADATA_ADDRESS");
-            _clientId = Environment.GetEnvironmentVariable("CLIENT_ID");
+            _b2cClientId = TryGetEnvironmentVariable("B2C_CLIENT_ID");
+            _aadClientId = TryGetEnvironmentVariable("AAD_CLIENT_ID");
 
-            _b2cConfigurationManager = 
+            _b2cConfigurationManager =
                 new ConfigurationManager<OpenIdConnectConfiguration>(
-                    b2cMetadataAddress, new OpenIdConnectConfigurationRetriever());
+                    TryGetEnvironmentVariable("B2C_METADATA_ADDRESS"), new OpenIdConnectConfigurationRetriever());
 
-            _aadConfigurationManager = 
+            _aadConfigurationManager =
                 new ConfigurationManager<OpenIdConnectConfiguration>(
-                    aadMetadataAddress, new OpenIdConnectConfigurationRetriever());
+                    TryGetEnvironmentVariable("AAD_METADATA_ADDRESS"), new OpenIdConnectConfigurationRetriever());
         }
 
         public Task<IValueProvider> BindAsync(BindingContext context)
@@ -76,7 +76,7 @@ namespace Functions.CustomBindings
 
                 var claimsPrincipal = handler.ValidateToken(bearerToken, new TokenValidationParameters()
                 {
-                    ValidAudience = _clientId,
+                    ValidAudience = _b2cClientId,
                     ValidIssuer = connectConfiguration.Issuer,
                     IssuerSigningKeys = connectConfiguration.SigningKeys,
                     ValidateIssuerSigningKey = true
@@ -101,7 +101,7 @@ namespace Functions.CustomBindings
 
                 var claimsPrincipal = handler.ValidateToken(bearerToken, new TokenValidationParameters()
                 {
-                    ValidAudience = _clientId,
+                    ValidAudience = _aadClientId,
                     ValidIssuer = connectConfiguration.Issuer,
                     IssuerSigningKeys = connectConfiguration.SigningKeys,
                     ValidateIssuerSigningKey = true
@@ -119,6 +119,18 @@ namespace Functions.CustomBindings
             }
 
             return AccessTokenResult.Error(b2cException, aadException);
+        }
+
+        private string TryGetEnvironmentVariable(string variableName)
+        {
+            var value = Environment.GetEnvironmentVariable(variableName);
+
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                throw new InvalidOperationException($"{variableName} settings must be provided");
+            }
+
+            return value;
         }
     }
 }
