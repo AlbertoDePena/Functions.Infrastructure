@@ -40,7 +40,7 @@ namespace SampleApp
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "example")] HttpRequest request,
             ILogger logger,
-            [AccessToken] AccessTokenResult accessTokenResult)
+            [AccessToken(b2cClientId: "%B2C_CLIENT_ID%", b2cMetadataAddress: "%B2C_METADATA_ADDRESS%", aadClientId: "%AAD_CLIENT_ID%", aadMetadataAddress: "%AAD_METADATA_ADDRESS%")] AccessTokenResult accessTokenResult)
         {
             Task<IActionResult> SayHello()
             {

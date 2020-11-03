@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Azure.WebJobs.Host.Bindings;
 using Microsoft.Azure.WebJobs.Host.Protocols;
 using Microsoft.IdentityModel.Protocols;
@@ -21,18 +23,21 @@ namespace Functions.CustomBindings
         private readonly ConfigurationManager<OpenIdConnectConfiguration> _b2cConfigurationManager;
         private readonly ConfigurationManager<OpenIdConnectConfiguration> _aadConfigurationManager;
 
-        public AccessTokenBinding()
+        public AccessTokenBinding(AccessTokenAttribute attribute, INameResolver nameResolver)
         {
-            _b2cClientId = TryGetEnvironmentVariable("B2C_CLIENT_ID");
-            _aadClientId = TryGetEnvironmentVariable("AAD_CLIENT_ID");
+            if (attribute == null) throw new ArgumentNullException(nameof(attribute));
+            if (nameResolver == null) throw new ArgumentNullException(nameof(nameResolver));
+
+            _b2cClientId = nameResolver.ResolveWholeString(attribute.B2cClientId);
+            _aadClientId = nameResolver.ResolveWholeString(attribute.AadClientId);
 
             _b2cConfigurationManager =
                 new ConfigurationManager<OpenIdConnectConfiguration>(
-                    TryGetEnvironmentVariable("B2C_METADATA_ADDRESS"), new OpenIdConnectConfigurationRetriever());
+                    nameResolver.ResolveWholeString(attribute.B2cMetadataAddress), new OpenIdConnectConfigurationRetriever());
 
             _aadConfigurationManager =
                 new ConfigurationManager<OpenIdConnectConfiguration>(
-                    TryGetEnvironmentVariable("AAD_METADATA_ADDRESS"), new OpenIdConnectConfigurationRetriever());
+                    nameResolver.ResolveWholeString(attribute.AadMetadataAddress), new OpenIdConnectConfigurationRetriever());
         }
 
         public Task<IValueProvider> BindAsync(BindingContext context)
@@ -119,18 +124,6 @@ namespace Functions.CustomBindings
             }
 
             return AccessTokenResult.Error(b2cException, aadException);
-        }
-
-        private string TryGetEnvironmentVariable(string variableName)
-        {
-            var value = Environment.GetEnvironmentVariable(variableName);
-
-            if (string.IsNullOrWhiteSpace(value))
-            {
-                throw new InvalidOperationException($"{variableName} settings must be provided");
-            }
-
-            return value;
         }
     }
 }
